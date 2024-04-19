@@ -27,5 +27,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "wireguard-android"
 
+include(":bridge")
 include(":tunnel")
 include(":ui")
