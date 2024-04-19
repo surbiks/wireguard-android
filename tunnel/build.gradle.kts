@@ -66,6 +66,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":bridge"))
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.collection)
     compileOnly(libs.jsr305)

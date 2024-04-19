@@ -66,6 +66,7 @@ android {
 
 dependencies {
     implementation(project(":tunnel"))
+    implementation(project(":bridge"))
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.appcompat)
