@@ -35,6 +35,7 @@ public final class Peer {
     private final Optional<Integer> persistentKeepalive;
     private final Optional<Key> preSharedKey;
     private final Key publicKey;
+    private final Optional<String> bridge;
 
     private Peer(final Builder builder) {
         // Defensively copy to ensure immutability even if the Builder is reused.
@@ -43,6 +44,7 @@ public final class Peer {
         persistentKeepalive = builder.persistentKeepalive;
         preSharedKey = builder.preSharedKey;
         publicKey = Objects.requireNonNull(builder.publicKey, "Peers must have a public key");
+        bridge = builder.bridge;
     }
 
     /**
@@ -75,6 +77,9 @@ public final class Peer {
                 case "publickey":
                     builder.parsePublicKey(attribute.getValue());
                     break;
+                case "bridge":
+                    builder.setBridge(attribute.getValue());
+                    break;
                 default:
                     throw new BadConfigException(Section.PEER, Location.TOP_LEVEL,
                             Reason.UNKNOWN_ATTRIBUTE, attribute.getKey());
@@ -92,7 +97,8 @@ public final class Peer {
                 && endpoint.equals(other.endpoint)
                 && persistentKeepalive.equals(other.persistentKeepalive)
                 && preSharedKey.equals(other.preSharedKey)
-                && publicKey.equals(other.publicKey);
+                && publicKey.equals(other.publicKey)
+                && bridge.equals(other.bridge);
     }
 
     /**
@@ -141,6 +147,10 @@ public final class Peer {
         return publicKey;
     }
 
+    public Optional<String> getBridge() {
+        return bridge;
+    }
+
     @Override
     public int hashCode() {
         int hash = 1;
@@ -149,6 +159,7 @@ public final class Peer {
         hash = 31 * hash + persistentKeepalive.hashCode();
         hash = 31 * hash + preSharedKey.hashCode();
         hash = 31 * hash + publicKey.hashCode();
+        hash = 31 * hash + bridge.hashCode();
         return hash;
     }
 
@@ -215,6 +226,7 @@ public final class Peer {
         private Optional<Integer> persistentKeepalive = Optional.empty();
         // Defaults to not present.
         private Optional<Key> preSharedKey = Optional.empty();
+        private Optional<String> bridge = Optional.empty();
         // No default; must be provided before building.
         @Nullable private Key publicKey;
 
@@ -301,6 +313,11 @@ public final class Peer {
 
         public Builder setPublicKey(final Key publicKey) {
             this.publicKey = publicKey;
+            return this;
+        }
+
+        public Builder setBridge(final String bridge) {
+            this.bridge = Optional.of(bridge);
             return this;
         }
     }
